@@ -25,10 +25,12 @@ double GWZ::pobierzWartoscZadana(double czas)
         break;
     case TypSygnalu::sinusoida:
     {
-        if(czas >= czas_aktywacji)
+        if (czas >= czas_aktywacji)
         {
-            wartosc = amplituda * std::sin((2*M_PI/okres) * czas);
-            if(std::abs(wartosc) < 0.00000000001)
+            double indeks = std::fmod(czas, okres);
+            wartosc = amplituda * std::sin((2.0 * M_PI * indeks) / okres) + skladowa_stala;
+
+            if (std::abs(wartosc) < 1e-11)
             {
                 wartosc = 0.0;
             }
