@@ -56,6 +56,8 @@ private slots:
 
     void on_resetuj_clicked();
 
+    void on_reset_calka_clicked();
+
 private:
     Ui::UkladAutomatycznejRegulacji *ui;
     UkladSterowania* us;

@@ -423,6 +423,9 @@
                                    <height>30</height>
                                   </size>
                                  </property>
+                                 <property name="singleStep">
+                                  <double>0.100000000000000</double>
+                                 </property>
                                 </widget>
                                </item>
                               </layout>
@@ -634,6 +637,12 @@
                            <width>80</width>
                            <height>30</height>
                           </size>
+                         </property>
+                         <property name="maximum">
+                          <double>1.000000000000000</double>
+                         </property>
+                         <property name="singleStep">
+                          <double>0.100000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -1048,7 +1057,7 @@
      <x>0</x>
      <y>0</y>
      <width>1800</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

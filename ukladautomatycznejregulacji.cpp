@@ -493,3 +493,9 @@ void UkladAutomatycznejRegulacji::on_wgrajGWZ_clicked()
 }
 
 
+
+void UkladAutomatycznejRegulacji::on_reset_calka_clicked()
+{
+    us->regulator.reset();
+}
+
