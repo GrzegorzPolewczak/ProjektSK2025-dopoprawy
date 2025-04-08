@@ -13,11 +13,13 @@ double ModelARX::wykonajKrok(double wejscie) {
 
     bufor_sterowania.push_front(wejscie);
 
-    if (bufor_sterowania.size() > a.size() + opoznienie_k)
-    {
-        bufor_sterowania.resize(bufor_sterowania.size() - 1);
+    const size_t requiredSize = opoznienie_k + b.size();
+    if (bufor_sterowania.size() < requiredSize) {
+        bufor_sterowania.resize(requiredSize, 0.0);  // Uzupełnij zerami jeśli za krótki
     }
-
+    else if (bufor_sterowania.size() > requiredSize) {
+        bufor_sterowania.resize(requiredSize);       // Przytnij jeśli za długi
+    }
     double wyjscie = zaklocenie;
     for (size_t i = 0; i < b.size(); i++) {
         wyjscie += b[i] * bufor_sterowania[opoznienie_k + i];
