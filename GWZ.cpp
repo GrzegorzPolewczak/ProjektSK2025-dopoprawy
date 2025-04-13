@@ -22,7 +22,7 @@ double GWZ::pobierzWartoscZadana(double t)
         return skladowa_stala + amplituda;
 
     case TypSygnalu::sinusoida:
-        return skladowa_stala + amplituda * sin((2 * M_PI / okres) * czas_od_startu);
+        return skladowa_stala + (amplituda * sin((2 * M_PI / okres) * czas_od_startu));
 
     case TypSygnalu::prostokatny: {
         double t_modulo = fmod(czas_od_startu, okres);

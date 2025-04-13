@@ -62,3 +62,15 @@ void RegulatorPID::setGranica(double dolna, double gorna)
     dGranicaAW = dolna;
     gGranicaAW = gorna;
 }
+
+
+
+double RegulatorPID::getK(){return skladnik_wzmocnienia;}
+double RegulatorPID::getTi() {return skladnik_calkowania;}
+double RegulatorPID::getTd() {return skladnik_rozniczkowania;}
+void RegulatorPID::setAW(bool aw) {czyAW = aw;}
+
+void RegulatorPID::setK(double k) {wzmocnienie = k;}
+void RegulatorPID::setTi(double Ti) {stala_calkowania = Ti;}
+void RegulatorPID::setTd(double Td) {stala_rozniczkowania =Td;}
+void RegulatorPID::ustawMetodeCalkowania(bool metoda) { metoda_calkowania=metoda;}

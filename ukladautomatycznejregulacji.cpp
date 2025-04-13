@@ -30,14 +30,17 @@ void UkladAutomatycznejRegulacji::startSymulacji()
 {
     time += 0.1;
 
-    double wartZadana = us->gwz.pobierzWartoscZadana(time);
-    double wyjscie_arx = us->model.wykonajKrok(wartZadana);
-    double wyjscie_pid = us->regulator.wykonajKrok(uchyb);
-    double wzmocnienie = us->regulator.getK();
-    double Ti = us->regulator.getTi();
-    double Td = us->regulator.getTd();
-    uchyb = wartZadana - wyjscie_arx;
-    us->symuluj(wartZadana);
+    double wartZadana = us->gwz.pobierzWartoscZadana(time);//git
+    double wyjscie_pid = us->regulator.wykonajKrok(us->getUchyb());
+    double wyjscie_arx = us->model.wykonajKrok(wyjscie_pid);
+   // double wyjscie_pid = us->regulator.wykonajKrok(wartZadana);
+    double wzmocnienie = us->regulator.getK();//git
+    double Ti = us->regulator.getTi();//git
+    double Td = us->regulator.getTd();//git
+    double uchyb = us->getUchyb();//git
+    //uchyb = wartZadana - wyjscie_arx; //zle
+
+    //us->symuluj(wartZadana); //zle
 
     //ARX
     ui->customPlot->graph(0)->addData(time, wyjscie_arx);
@@ -46,7 +49,7 @@ void UkladAutomatycznejRegulacji::startSymulacji()
     //Wartość Zadana
     ui->customPlot->graph(1)->addData(time, wartZadana);
     //PID
-    ui->customPlot_pid->graph(0)->addData(time, wyjscie_pid);
+    ui->customPlot_pid->graph(0)->addData(time, wyjscie_pid);//Sterowanie
 
     ui->customPlot_pid->graph(1)->addData(time, wzmocnienie);
 
@@ -224,7 +227,7 @@ void UkladAutomatycznejRegulacji::ustawARX()
     {
         us->model.setZaklocenie(disruption);
     }
-    //double interwal = ui->interwal->value();
+
     us->model.setA(a);
     us->model.setB(b);
     us->model.setOpoznienie(delay);
@@ -395,7 +398,6 @@ void UkladAutomatycznejRegulacji::ustawShortcuty()
     connect(reset_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_resetuj_clicked);
 }
 
-
 void UkladAutomatycznejRegulacji::ustawWykresy()
 {
     // Wykres wyjścia modelu ARX
@@ -451,8 +453,6 @@ void UkladAutomatycznejRegulacji::ustawWykresy()
     ui->customPlot_pid->yAxis->setRange(-5, 5);
 }
 
-
-
 void UkladAutomatycznejRegulacji::on_ukryjLegendy_clicked()
 {
     if(isLegenda == true)
@@ -492,8 +492,6 @@ void UkladAutomatycznejRegulacji::on_wgrajGWZ_clicked()
     ustawGWZ();
     isWgrane[2] = 1;
 }
-
-
 
 void UkladAutomatycznejRegulacji::on_reset_calka_clicked()
 {

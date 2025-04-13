@@ -15,6 +15,7 @@ UkladSterowania::UkladSterowania()
     poprzedniUchyb = 0.0;
 }
 
+//git
 double UkladSterowania::symuluj(double aktualne_wejscie) {
     double wyjscie_pid;
     double uchyb = aktualne_wejscie - getPoprzedniUchyb();
@@ -22,7 +23,7 @@ double UkladSterowania::symuluj(double aktualne_wejscie) {
     wyjscie_pid = regulator.wykonajKrok(getUchyb());
     double wyjscie_model = model.wykonajKrok(wyjscie_pid);
     setPoprzedniUchyb(wyjscie_model);
-    return wyjscie_pid;
+    return wyjscie_model;
 }
 
 void UkladSterowania::setUchyb(double uchyb_)
