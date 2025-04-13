@@ -31,10 +31,16 @@ void UkladAutomatycznejRegulacji::startSymulacji()
     time += 0.1;
 
     double wartZadana = us->gwz.pobierzWartoscZadana(time);//git
+
+    us->setUchyb(wartZadana-us->getPoprzedniUchyb());
+
     double wyjscie_pid = us->regulator.wykonajKrok(us->getUchyb());
-    double wyjscie_arx = us->model.wykonajKrok(wyjscie_pid);
-   // double wyjscie_pid = us->regulator.wykonajKrok(wartZadana);
+    double wyjscie_arx = us->model.wykonajKrok(wartZadana);
+
+
     double wzmocnienie = us->regulator.getK();//git
+
+
     double Ti = us->regulator.getTi();//git
     double Td = us->regulator.getTd();//git
     double uchyb = us->getUchyb();//git
@@ -43,7 +49,7 @@ void UkladAutomatycznejRegulacji::startSymulacji()
     //us->symuluj(wartZadana); //zle
 
     //ARX
-    ui->customPlot->graph(0)->addData(time, wyjscie_arx);
+    ui->customPlot->graph(0)->addData(time, wyjscie_arx);//Wartosc regulowana
     //Uchyb
     ui->customPlot_uchyb->graph(0)->addData(time, uchyb);
     //Wartość Zadana

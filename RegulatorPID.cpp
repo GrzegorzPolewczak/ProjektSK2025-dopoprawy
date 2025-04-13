@@ -22,7 +22,7 @@ double RegulatorPID::wykonajKrok(double uchyb)
                 skladnik_calkowania = suma_calkowita / stala_calkowania;
             } else {
                 // Metoda zalecana (przemnażanie w każdym kroku)
-                suma_calkowita += (uchyb * (1.0 / stala_calkowania));
+                suma_calkowita += (uchyb / stala_calkowania);
                 skladnik_calkowania = suma_calkowita;
             }
         }
