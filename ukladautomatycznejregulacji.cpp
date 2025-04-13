@@ -161,6 +161,7 @@ void UkladAutomatycznejRegulacji::on_resetuj_clicked()
     ui->okres->clear();
     ui->gorna->clear();
     ui->dolna->clear();
+    us->model.setZaklocenie(0.0);
 }
 
 void UkladAutomatycznejRegulacji::on_wyczyscDane_clicked()

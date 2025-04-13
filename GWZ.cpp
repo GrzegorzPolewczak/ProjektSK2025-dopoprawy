@@ -8,59 +8,37 @@ GWZ::GWZ(TypSygnalu typ_, double amplituda_, int czas_aktywacji_, double okres_,
 
 GWZ::GWZ() {}
 
-double GWZ::pobierzWartoscZadana(double czas)
+double GWZ::pobierzWartoscZadana(double t)
 {
-    double wartosc = 0.0;
-    switch (typ)
-    {
-    case TypSygnalu::skok:
-        if (czas >= czas_aktywacji)
-        {
-            wartosc = amplituda;
-        }
-        else
-        {
-            wartosc = 0.0;
-        }
-        break;
-    case TypSygnalu::sinusoida:
-    {
-        if (czas >= czas_aktywacji)
-        {
-            double indeks = std::fmod(czas, okres);
-            wartosc = amplituda * std::sin((2.0 * M_PI * indeks) / okres) + skladowa_stala;
-
-            if (std::abs(wartosc) < 1e-11)
-            {
-                wartosc = 0.0;
-            }
-        }
-        break;
+    if (t < czas_aktywacji) {
+        return skladowa_stala;  // brak sygnału przed czasem aktywacji
     }
-    case TypSygnalu::prostokatny:
-        if (czas >= czas_aktywacji)
-        {
-            // Oblicz resztę z dzielenia czasu przez okres
-            double faza = std::fmod(czas, okres);
 
-            // Uwzględnij wypełnienie sygnału
-            if (faza < (okres * wypelnienie))
-            {
-                wartosc = amplituda + skladowa_stala;  // A + S
-            }
-            else
-            {
-                wartosc = skladowa_stala;  // S
-            }
+    double czas_od_startu = t - czas_aktywacji;
+
+    switch (typ) {
+
+    case TypSygnalu::skok:
+        return skladowa_stala + amplituda;
+
+    case TypSygnalu::sinusoida:
+        return skladowa_stala + amplituda * sin((2 * M_PI / okres) * czas_od_startu);
+
+    case TypSygnalu::prostokatny: {
+        double t_modulo = fmod(czas_od_startu, okres);
+
+        if (t_modulo < okres * wypelnienie) {
+            return skladowa_stala + amplituda;
+        } else {
+            return skladowa_stala;
         }
-        break;
+    }
 
     default:
-        wartosc = 0.0;
-        break;
-    };
-    return wartosc;
+        return skladowa_stala;
+    }
 }
+
 
 
 void GWZ::reset() {

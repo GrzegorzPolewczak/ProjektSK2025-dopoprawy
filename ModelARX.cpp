@@ -21,7 +21,7 @@ double ModelARX::wykonajKrok(double wejscie) {
     bufor_sterowania.push_front(wejscie);
 
     if (bufor_sterowania.size() > requiredSize) {
-        bufor_sterowania.resize(requiredSize);
+        bufor_sterowania.pop_back();
     }
 
     double wyjscie = zaklocenie;

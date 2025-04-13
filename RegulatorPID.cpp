@@ -3,7 +3,11 @@
 RegulatorPID :: RegulatorPID(double k, double Ti, double Td, double dG, double gG)
     : wzmocnienie(k), stala_calkowania(Ti), stala_rozniczkowania(Td), suma_calkowita(0), dGranicaAW(dG), gGranicaAW(gG)
 {}
-RegulatorPID::RegulatorPID() {}
+RegulatorPID::RegulatorPID() {
+    skladnik_calkowania =0;
+    skladnik_rozniczkowania=0;
+    skladnik_wzmocnienia=0;
+}
 double RegulatorPID::wykonajKrok(double uchyb)
 {
     // Składowa proporcjonalna
