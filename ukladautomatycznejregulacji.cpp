@@ -1,4 +1,5 @@
 #include "ukladautomatycznejregulacji.h"
+#include "oknoarx.h"
 #include "ui_ukladautomatycznejregulacji.h"
 
 const QString nazwa = "konfiguracja.txt";
@@ -65,7 +66,7 @@ void UkladAutomatycznejRegulacji::startSymulacji()
 
     if (time > ui->customPlot->xAxis->range().upper)
     {
-        ui->customPlot->xAxis->setRange(time, 10, Qt::AlignRight);
+        ui->customPlot->xAxis->setRange(time, 10, Qt::AlignRight);s
         ui->customPlot_uchyb->xAxis->setRange(time, 10, Qt::AlignRight);
         ui->customPlot_pid->xAxis->setRange(time, 10, Qt::AlignRight);
     }
@@ -132,11 +133,11 @@ void UkladAutomatycznejRegulacji::on_resetuj_clicked()
         timer->stop();
     }
 
-    // Reset wartości symulacji
+    // RESET WARTOŚCI SYMULACJI - CZAS I UCHYB
     time = 0.0;
     uchyb = 0.0;
 
-    // Czyszczenie wykresów
+    // CZYSZCZENIE WYKRESÓW
     ui->customPlot->graph(0)->data()->clear();
     ui->customPlot->graph(1)->data()->clear();
     ui->customPlot_uchyb->graph(0)->data()->clear();
@@ -145,22 +146,18 @@ void UkladAutomatycznejRegulacji::on_resetuj_clicked()
     ui->customPlot_pid->graph(2)->data()->clear();
     ui->customPlot_pid->graph(3)->data()->clear();
 
-    // Aktualizacja wykresów
+    // AKTUALIZACJA WYKRESÓW
     ui->customPlot->replot();
     ui->customPlot_uchyb->replot();
     ui->customPlot_pid->replot();
 
-    // Reset przycisków
+    // ZRESETOWANIE PRZYCISKÓW
     ui->symuluj->setEnabled(true);
     ui->zatrzymaj->setEnabled(false);
     ui->resetuj->setEnabled(false);
     ui->ukryjLegendy->setEnabled(false);
 
     // Czyszczenie pól edycyjnych
-    ui->te_a->clear();
-    ui->te_b->clear();
-    ui->te_opoznienie->clear();
-    ui->te_zaklocenie->clear();
     ui->te_k->clear();
     ui->te_ti->clear();
     ui->te_td->clear();
@@ -193,11 +190,13 @@ void UkladAutomatycznejRegulacji::on_wyczyscDane_clicked()
     ui->dolna->clear();
 }
 
+/*
 void UkladAutomatycznejRegulacji::ustawARX()
 {
     bool ok;
     std::vector<double> a;
     std::vector<double> b;
+
     QString text_a = ui->te_a->toPlainText();
     QString text_b = ui->te_b->toPlainText();
 
@@ -227,6 +226,7 @@ void UkladAutomatycznejRegulacji::ustawARX()
              QMessageBox::warning(this, "Błąd wartości", "Podaj poprawną wartość wektora B!", QMessageBox::Ok);
         }
     }
+
     int delay = ui->te_opoznienie->value();
     double disruption = ui->te_zaklocenie->value();
     if(disruption >= 0.0)
@@ -241,7 +241,11 @@ void UkladAutomatycznejRegulacji::ustawARX()
     int interwalCzasowy = ui->interwal->value();
     timer->setInterval(interwalCzasowy);
 
-}
+}*/
+
+
+
+
 
 void UkladAutomatycznejRegulacji::ustawPID()
 {
@@ -297,7 +301,8 @@ void UkladAutomatycznejRegulacji::ZapisDoPliku()
 {
     bool ok;
     QFile plik(nazwa);
-    if (!plik.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (!plik.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
         QMessageBox::warning(this, "Błąd otwarcia pliku", "Program nie mógł otworzyć pliku w celu zapisu konfiguracji do pliku", QMessageBox::Ok);
     }
     QTextStream out(&plik);
@@ -332,7 +337,6 @@ void UkladAutomatycznejRegulacji::ZapisDoPliku()
     out << "gorna: " << ui->gorna->value() << "\n";
     QMessageBox::information(this, "Zapis do pliku", "Konfiguracja została zapisana do pliku", QMessageBox::Ok);
     plik.close();
-
 }
 
 void UkladAutomatycznejRegulacji::on_wgrajzPliku_clicked()
@@ -343,7 +347,8 @@ void UkladAutomatycznejRegulacji::on_wgrajzPliku_clicked()
 void UkladAutomatycznejRegulacji::WczytajzPliku()
 {
     QFile plik(nazwa);
-    if (!plik.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!plik.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
         QMessageBox::warning(this, "Błąd otwarcia pliku", "Program nie mógł otworzyć pliku w celu wczytania konfiguracji", QMessageBox::Ok);
         return;
     }
@@ -386,22 +391,6 @@ void UkladAutomatycznejRegulacji::WczytajzPliku()
         }
     }
     plik.close();
-}
-
-void UkladAutomatycznejRegulacji::ustawShortcuty()
-{
-    QShortcut* zapis_skrot = new QShortcut(QKeySequence("Ctrl+S"), this);
-    QShortcut* wczytaj_skrot = new QShortcut(QKeySequence("Ctrl+L"), this);
-    QShortcut* start_skrot = new QShortcut(QKeySequence("Ctrl+F2"),this);
-    QShortcut* stop_skrot = new QShortcut(QKeySequence("Ctrl+F3"), this);
-    QShortcut* wyczysc_skrot = new QShortcut(QKeySequence("Ctrl+F4"), this);
-    QShortcut* reset_skrot = new QShortcut(QKeySequence("Ctrl+R"), this);
-    connect(zapis_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::ZapisDoPliku);
-    connect(wczytaj_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::WczytajzPliku);
-    connect(start_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_symuluj_clicked);
-    connect(stop_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_zatrzymaj_clicked);
-    connect(wyczysc_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_wyczyscDane_clicked);
-    connect(reset_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_resetuj_clicked);
 }
 
 void UkladAutomatycznejRegulacji::ustawWykresy()
@@ -480,11 +469,21 @@ void UkladAutomatycznejRegulacji::on_ukryjLegendy_clicked()
 }
 
 
+
 void UkladAutomatycznejRegulacji::on_wgrajARX_clicked()
 {
-    ustawARX();
-    isWgrane[0] = 1;
+    Oknoarx okienko(this);
+
+    if (okienko.exec() == QDialog::Accepted)
+    {
+        text_a = okienko.getWartoscA();
+        text_b = okienko.getWartoscB();
+
+
+    }
 }
+
+
 
 
 void UkladAutomatycznejRegulacji::on_wgrajPID_clicked()
@@ -504,3 +503,23 @@ void UkladAutomatycznejRegulacji::on_reset_calka_clicked()
     us->regulator.reset();
 }
 
+
+
+
+
+
+void UkladAutomatycznejRegulacji::ustawShortcuty()
+{
+    QShortcut* zapis_skrot = new QShortcut(QKeySequence("Ctrl+S"), this);
+    QShortcut* wczytaj_skrot = new QShortcut(QKeySequence("Ctrl+L"), this);
+    QShortcut* start_skrot = new QShortcut(QKeySequence("Ctrl+F2"),this);
+    QShortcut* stop_skrot = new QShortcut(QKeySequence("Ctrl+F3"), this);
+    QShortcut* wyczysc_skrot = new QShortcut(QKeySequence("Ctrl+F4"), this);
+    QShortcut* reset_skrot = new QShortcut(QKeySequence("Ctrl+R"), this);
+    connect(zapis_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::ZapisDoPliku);
+    connect(wczytaj_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::WczytajzPliku);
+    connect(start_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_symuluj_clicked);
+    connect(stop_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_zatrzymaj_clicked);
+    connect(wyczysc_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_wyczyscDane_clicked);
+    connect(reset_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_resetuj_clicked);
+}

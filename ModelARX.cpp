@@ -3,7 +3,8 @@
 #include <numeric>
 
 ModelARX::ModelARX(std::vector<double>& a_, std::vector<double>& b_, int opoznienie, double zaklocenie_)
-    : a(a_), b(b_), opoznienie_k(opoznienie), zaklocenie(zaklocenie_) {
+    : a(a_), b(b_), opoznienie_k(opoznienie), zaklocenie(zaklocenie_)
+{
     bufor_sterowania = std::deque<double>(b.size() + opoznienie_k, 0.0);
     bufor_opoznienia = std::deque<double>(a.size(), 0.0);
 }

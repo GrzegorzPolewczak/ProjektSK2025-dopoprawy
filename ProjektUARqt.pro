@@ -14,6 +14,7 @@ SOURCES += \
     RegulatorPID.cpp \
     UkladSterowania.cpp \
     main.cpp \
+    oknoarx.cpp \
     qcustomplot.cpp \
     ukladautomatycznejregulacji.cpp
 
@@ -22,10 +23,12 @@ HEADERS += \
     ModelARX.h \
     RegulatorPID.h \
     UkladSterowania.h \
+    oknoarx.h \
     qcustomplot.h \
     ukladautomatycznejregulacji.h
 
 FORMS += \
+    oknoarx.ui \
     ukladautomatycznejregulacji.ui
 
 # Default rules for deployment.
