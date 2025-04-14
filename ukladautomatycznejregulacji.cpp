@@ -35,7 +35,22 @@ void UkladAutomatycznejRegulacji::startSymulacji()
 
 
     double wyjscie_pid = us->regulator.wykonajKrok(us->getUchyb());
-    double wyjscie_arx = us->model.wykonajKrok(wartZadana);
+
+    double wartosc_zaklocenia = 0.0;
+
+    if (zaklocenie != 0.0)
+    {
+        std::random_device srng;
+        std::mt19937 rng;
+        rng.seed(srng());
+        std::normal_distribution<double> rozkladnormalny(0.0, this->zaklocenie);
+
+        wartosc_zaklocenia = rozkladnormalny(rng);
+        qDebug() << "Zakłócenie: " << zaklocenie;
+        qDebug() << "Wartość zakłócenia:" << wartosc_zaklocenia;
+    }
+
+    double wyjscie_arx = us->model.wykonajKrok(wartZadana) + wartosc_zaklocenia;
     double uchyb = wartZadana - wyjscie_arx;
     us->setUchyb(uchyb);
 
