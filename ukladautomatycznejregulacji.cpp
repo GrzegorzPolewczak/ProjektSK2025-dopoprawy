@@ -10,7 +10,7 @@ UkladAutomatycznejRegulacji::UkladAutomatycznejRegulacji(QWidget *parent)
 {
     ui->setupUi(this);
     us = new UkladSterowania();
-    setFixedSize(1800, 900);
+    setFixedSize(1400, 780);
     ustawShortcuty();
     ustawWykresy();
     ui->gorna->setMaximum(1000);
@@ -33,21 +33,18 @@ void UkladAutomatycznejRegulacji::startSymulacji()
 
     double wartZadana = us->gwz.pobierzWartoscZadana(time);//git
 
-    us->setUchyb(wartZadana-us->getPoprzedniUchyb());
 
     double wyjscie_pid = us->regulator.wykonajKrok(us->getUchyb());
     double wyjscie_arx = us->model.wykonajKrok(wartZadana);
-
+    double uchyb = wartZadana - wyjscie_arx;
+    us->setUchyb(uchyb);
 
     double wzmocnienie = us->regulator.getK();//git
 
-
     double Ti = us->regulator.getTi();//git
     double Td = us->regulator.getTd();//git
-    double uchyb = us->getUchyb();//git
     //uchyb = wartZadana - wyjscie_arx; //zle
 
-    //us->symuluj(wartZadana); //zle
 
     //ARX
     ui->customPlot->graph(0)->addData(time, wyjscie_arx);//Wartosc regulowana
@@ -66,7 +63,7 @@ void UkladAutomatycznejRegulacji::startSymulacji()
 
     if (time > ui->customPlot->xAxis->range().upper)
     {
-        ui->customPlot->xAxis->setRange(time, 10, Qt::AlignRight);s
+        ui->customPlot->xAxis->setRange(time, 10, Qt::AlignRight);
         ui->customPlot_uchyb->xAxis->setRange(time, 10, Qt::AlignRight);
         ui->customPlot_pid->xAxis->setRange(time, 10, Qt::AlignRight);
     }
@@ -92,7 +89,7 @@ void UkladAutomatycznejRegulacji::on_symuluj_clicked()
     if(czyWgrane == true)
     {
         if(!timer->isActive()){
-            int interwalCzasowy = ui->interwal->value(); // Pobranie wartości interwału ze spinboxa
+            int interwalCzasowy = interwal; // Pobranie wartości interwału ze spinboxa
             timer->start(interwalCzasowy);  // Ustawienie nowego interwału timera
 
             // Dezaktywacja przycisku Start i aktywacja Stop
@@ -171,11 +168,7 @@ void UkladAutomatycznejRegulacji::on_resetuj_clicked()
 }
 
 void UkladAutomatycznejRegulacji::on_wyczyscDane_clicked()
-{
-    ui->te_a->clear();
-    ui->te_b->clear();
-    ui->te_opoznienie->clear();
-    ui->te_zaklocenie->clear();
+{ 
     ui->te_k->clear();
     ui->te_ti->clear();
     ui->te_td->clear();
@@ -190,15 +183,15 @@ void UkladAutomatycznejRegulacji::on_wyczyscDane_clicked()
     ui->dolna->clear();
 }
 
-/*
-void UkladAutomatycznejRegulacji::ustawARX()
+
+void UkladAutomatycznejRegulacji::ustawARX(QString wektor_a, QString wektor_b, int opoznienie, double zaklocenie, double interwal)
 {
     bool ok;
     std::vector<double> a;
     std::vector<double> b;
 
-    QString text_a = ui->te_a->toPlainText();
-    QString text_b = ui->te_b->toPlainText();
+    QString text_a = wektor_a;
+    QString text_b = wektor_b;
 
     QStringList aList = text_a.split(" ");
     QStringList bList = text_b.split(" ");
@@ -227,8 +220,8 @@ void UkladAutomatycznejRegulacji::ustawARX()
         }
     }
 
-    int delay = ui->te_opoznienie->value();
-    double disruption = ui->te_zaklocenie->value();
+    int delay = opoznienie;
+    double disruption = zaklocenie;
     if(disruption >= 0.0)
     {
         us->model.setZaklocenie(disruption);
@@ -238,14 +231,10 @@ void UkladAutomatycznejRegulacji::ustawARX()
     us->model.setB(b);
     us->model.setOpoznienie(delay);
     us->model.setZaklocenie(disruption);
-    int interwalCzasowy = ui->interwal->value();
+    int interwalCzasowy = interwal;
     timer->setInterval(interwalCzasowy);
 
-}*/
-
-
-
-
+}
 
 void UkladAutomatycznejRegulacji::ustawPID()
 {
@@ -268,13 +257,16 @@ void UkladAutomatycznejRegulacji::ustawGWZ()
 {
     TypSygnalu typ;
     QString typSygnalu = ui->comboGWZ->currentText();
-    if(typSygnalu == "skok"){
+    if(typSygnalu == "skok")
+    {
         typ = TypSygnalu::skok;
     }
-    if(typSygnalu == "sinusoida"){
+    if(typSygnalu == "sinusoida")
+    {
         typ = TypSygnalu::sinusoida;
     }
-    if(typSygnalu == "prostokatny"){
+    if(typSygnalu == "prostokatny")
+    {
         typ = TypSygnalu::prostokatny;
     }
     double amplituda = ui->amplituda->value();
@@ -306,24 +298,24 @@ void UkladAutomatycznejRegulacji::ZapisDoPliku()
         QMessageBox::warning(this, "Błąd otwarcia pliku", "Program nie mógł otworzyć pliku w celu zapisu konfiguracji do pliku", QMessageBox::Ok);
     }
     QTextStream out(&plik);
-    if(!(ui->te_a->toPlainText().isEmpty()))
+    if(!(wektor_a.isEmpty()))
     {
-        out << "a: " << ui->te_a->toPlainText().toDouble(&ok) << "\n";
+        out << "a: " << wektor_a.toDouble(&ok) << "\n";
     }
     else
     {
         out << "a: " << 0 << "\n";
     }
-    if(!(ui->te_b->toPlainText().isEmpty()))
+    if(!(wektor_b.isEmpty()))
     {
-        out << "b: " << ui->te_b->toPlainText().toDouble(&ok) << "\n";
+        out << "b: " << wektor_b.toDouble(&ok) << "\n";
     }
     else
     {
         out << "b: " << 0 << "\n";
     }
-    out << "opoznienie: " << ui->te_opoznienie->value() << "\n";
-    out << "zaklocenie: " << ui->te_zaklocenie->value() << "\n";
+    out << "opoznienie: " << opoznienie<< "\n";
+    out << "zaklocenie: " << zaklocenie << "\n";
     out << "k: " << ui->te_k->value() << "\n";
     out << "Ti: " << ui->te_ti->value() << "\n";
     out << "Td: " << ui->te_td->value() << "\n";
@@ -356,13 +348,13 @@ void UkladAutomatycznejRegulacji::WczytajzPliku()
     while (!in.atEnd()) {
         QString linia = in.readLine();
         if (linia.startsWith("a:")) {
-            ui->te_a->setPlainText(linia.mid(2).trimmed());
+            wektor_a = linia.mid(2).trimmed();
         } else if (linia.startsWith("b:")) {
-            ui->te_b->setPlainText(linia.mid(2).trimmed());
+            wektor_b = linia.mid(2).trimmed();
         } else if (linia.startsWith("opoznienie:")) {
-            ui->te_opoznienie->setValue(linia.section(':', 1).trimmed().toDouble());
+            opoznienie = (linia.section(':', 1).trimmed().toDouble());
         } else if (linia.startsWith("zaklocenie:")) {
-            ui->te_zaklocenie->setValue(linia.section(':', 1).trimmed().toDouble());
+            zaklocenie = (linia.section(':', 1).trimmed().toDouble());
         } else if (linia.startsWith("k:")) {
             ui->te_k->setValue(linia.section(':', 1).trimmed().toDouble());
         } else if (linia.startsWith("Ti:")) {
@@ -468,23 +460,24 @@ void UkladAutomatycznejRegulacji::on_ukryjLegendy_clicked()
     }
 }
 
-
-
 void UkladAutomatycznejRegulacji::on_wgrajARX_clicked()
 {
     Oknoarx okienko(this);
 
     if (okienko.exec() == QDialog::Accepted)
     {
-        text_a = okienko.getWartoscA();
-        text_b = okienko.getWartoscB();
+        wektor_a = okienko.getWartoscA();
+        wektor_b = okienko.getWartoscB();
+        opoznienie = okienko.getOpoznienie();
+        zaklocenie = okienko.getZaklocenie();
+        interwal = okienko.getInterwal();
 
+        isWgrane[0] = 1;
+        ustawARX(wektor_a, wektor_b, opoznienie, zaklocenie, interwal);
 
     }
+
 }
-
-
-
 
 void UkladAutomatycznejRegulacji::on_wgrajPID_clicked()
 {

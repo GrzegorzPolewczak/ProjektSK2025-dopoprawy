@@ -38,10 +38,9 @@ private slots:
 
     void ustawWykresy();
 
-    void ustawARX();
+    void ustawARX(QString wektor_a, QString wektor_b, int opoznienie, double zaklocenie, double interwal);
     void ustawPID();
     void ustawGWZ();
-
 
     void on_zatrzymaj_clicked();
 
@@ -61,11 +60,16 @@ private slots:
 private:
     Ui::UkladAutomatycznejRegulacji *ui;
     UkladSterowania* us;
+    QString text_a, text_b;
     double uchyb = 0.0;
     bool isZaklocenie = true;
     QTimer *timer;
     double time;
     bool isLegenda = true;
     bool isWgrane[3] = {0,0,0};
+    QString wektor_a, wektor_b;
+    int opoznienie;
+    double zaklocenie, interwal;
+
 };
 #endif // UKLADAUTOMATYCZNEJREGULACJI_H

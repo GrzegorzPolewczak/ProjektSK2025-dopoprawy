@@ -29,7 +29,6 @@ public:
     void setInterwal (double interwal);
 
 
-
 private:
     Ui::Oknoarx *ui;
 };

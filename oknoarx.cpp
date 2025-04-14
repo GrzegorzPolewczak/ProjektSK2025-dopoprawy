@@ -1,6 +1,7 @@
 #include "oknoarx.h"
 #include "ui_oknoarx.h"
-#include "modelARX.h"
+#include "ukladautomatycznejregulacji.h"
+
 
 Oknoarx::Oknoarx(QWidget *parent)
     : QDialog(parent)
@@ -11,9 +12,9 @@ Oknoarx::Oknoarx(QWidget *parent)
     connect(ui->btn_zatwierdz,&QPushButton::clicked,this,&Oknoarx::accept);
     connect(ui->btn_anuluj,&QPushButton::clicked,this,&Oknoarx::reject);
     //USTAWIENIE WARTOŚCI MIN I MAX ZAKŁÓCENIA I OPÓŹNIENIA
-    ui->dspinbox_zakl->setMinimum(0.0);
     ui->dspinbox_opoz->setMinimum(1.0);
     ui->dspinbox_opoz->setMaximum(1000.0);
+    ui->dspinbox_zakl->setMinimum(0.0);
     ui->dspinbox_zakl->setMaximum(1000.0);
 }
 
@@ -44,7 +45,6 @@ void Oknoarx::setInterwal(double interwal)
     ui->dspinbox_inter->setValue(interwal);
 }
 
-
 //GETTERY DO WARTOŚCI ARX
 QString Oknoarx::getWartoscA()
 {
@@ -66,3 +66,4 @@ double Oknoarx::getInterwal()
 {
     return ui->dspinbox_inter->value();
 }
+

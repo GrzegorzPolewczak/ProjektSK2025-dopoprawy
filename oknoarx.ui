@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Ustawienia modelu ARX</string>
   </property>
   <widget class="QLabel" name="label_6">
    <property name="geometry">
@@ -65,6 +65,15 @@
      <width>90</width>
      <height>25</height>
     </rect>
+   </property>
+   <property name="maximum">
+    <double>1000.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>10.000000000000000</double>
+   </property>
+   <property name="value">
+    <double>100.000000000000000</double>
    </property>
   </widget>
   <widget class="QDoubleSpinBox" name="dspinbox_opoz">
@@ -143,6 +152,12 @@
      <width>90</width>
      <height>25</height>
     </rect>
+   </property>
+   <property name="maximum">
+    <double>1.000000000000000</double>
+   </property>
+   <property name="singleStep">
+    <double>0.010000000000000</double>
    </property>
   </widget>
   <widget class="QLabel" name="label_5">
