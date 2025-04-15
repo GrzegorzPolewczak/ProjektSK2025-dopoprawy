@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "UkladSterowania.h"
+#include "NetworkManager.h"
 #include <QShortcut>
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -57,6 +58,10 @@ private slots:
 
     void on_reset_calka_clicked();
 
+    void on_btn_start_server_clicked();
+
+    void on_btn_polacz_klient_clicked();
+
 private:
     Ui::UkladAutomatycznejRegulacji *ui;
     UkladSterowania* us;
@@ -70,6 +75,8 @@ private:
     QString wektor_a, wektor_b;
     int opoznienie;
     double zaklocenie, interwal;
+
+    NetworkManager *manager;
 
 };
 #endif // UKLADAUTOMATYCZNEJREGULACJI_H

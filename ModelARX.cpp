@@ -28,27 +28,15 @@ double ModelARX::wykonajKrok(double wejscie) {
 
     double wyjscie = zaklocenie;
 
-    double iloczyn_wek_B = std::inner_product(b.begin(),
-                                              b.end(),
-                                              bufor_sterowania.begin() + opoznienie_k,
-                                              0.0);
+    for (size_t i = 0; i < b.size(); i++) {
+       wyjscie += b[i] * bufor_sterowania[opoznienie_k + i];
+    }
 
-    double iloczyn_wek_A = std::inner_product(a.begin(),
-                                              a.end(),
-                                              bufor_opoznienia.begin(),
-                                              0.0);
-
-    wyjscie = iloczyn_wek_B - iloczyn_wek_A;
-
-    //for (size_t i = 0; i < b.size(); i++) {
-    //    wyjscie += b[i] * bufor_sterowania[opoznienie_k + i];
-    //}
-
-    //for (size_t i = 0; i < a.size(); i++) {
-    //    if (i < bufor_opoznienia.size()) {
-    //        wyjscie -= a[i] * bufor_opoznienia[i];
-    //    }
-    //}
+    for (size_t i = 0; i < a.size(); i++) {
+        if (i < bufor_opoznienia.size()) {
+            wyjscie -= a[i] * bufor_opoznienia[i];
+        }
+    }
 
     bufor_opoznienia.push_front(wyjscie);
     if (bufor_opoznienia.size() > a.size()) {

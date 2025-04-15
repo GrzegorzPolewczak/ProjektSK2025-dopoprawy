@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -11,6 +12,7 @@ CONFIG += c++17
 SOURCES += \
     GWZ.cpp \
     ModelARX.cpp \
+    NetworkManager.cpp \
     RegulatorPID.cpp \
     UkladSterowania.cpp \
     main.cpp \
@@ -21,6 +23,7 @@ SOURCES += \
 HEADERS += \
     GWZ.h \
     ModelARX.h \
+    NetworkManager.h \
     RegulatorPID.h \
     UkladSterowania.h \
     oknoarx.h \

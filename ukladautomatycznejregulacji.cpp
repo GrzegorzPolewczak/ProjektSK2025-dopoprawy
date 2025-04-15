@@ -20,6 +20,23 @@ UkladAutomatycznejRegulacji::UkladAutomatycznejRegulacji(QWidget *parent)
     ui->zatrzymaj->setEnabled(false);
     ui->ukryjLegendy->setEnabled(false);
 
+
+    manager = new NetworkManager(this);
+    connect(manager, &NetworkManager::connectedToPeer, this, [=]() {
+        QMessageBox::information(this, "Połączono", "Połączono z serwerem");
+        //ui->wgrajARX->setEnabled(false);
+        ui->wgrajPID->setEnabled(false);
+        ui->wgrajGWZ->setEnabled(false);
+    });
+    connect(manager, &NetworkManager::clientConnected, this, [=]() {
+        QMessageBox::information(this, "Klient połączony", "Klient połączył się z serwerem");
+        ui->wgrajARX->setEnabled(false);
+        //ui->wgrajPID->setEnabled(false);
+        //ui->wgrajGWZ->setEnabled(false);
+    });
+    connect(manager, &NetworkManager::connectionFailed, this, [=](QString reason) {
+        QMessageBox::critical(this, "Błąd połączenia", reason);
+    });
 }
 
 UkladAutomatycznejRegulacji::~UkladAutomatycznejRegulacji()
@@ -531,3 +548,28 @@ void UkladAutomatycznejRegulacji::ustawShortcuty()
     connect(wyczysc_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_wyczyscDane_clicked);
     connect(reset_skrot, &QShortcut::activated, this, &UkladAutomatycznejRegulacji::on_resetuj_clicked);
 }
+
+void UkladAutomatycznejRegulacji::on_btn_start_server_clicked()
+{
+    bool ok;
+    int port = QInputDialog::getInt(this, "Port", "Podaj port serwera:", 12345, 0, 65535, 1, &ok);
+    if (ok) {
+        if (manager->startServer(port)) {
+            QMessageBox::information(this, "Serwer", "Serwer nasłuchuje na porcie " + QString::number(port));
+        }
+    }
+}
+
+
+void UkladAutomatycznejRegulacji::on_btn_polacz_klient_clicked()
+{
+    bool ok;
+    QString host = QInputDialog::getText(this, "Adres IP", "Podaj adres IP:", QLineEdit::Normal, "127.0.0.1", &ok);
+    if (!ok || host.isEmpty()) return;
+
+    int port = QInputDialog::getInt(this, "Port", "Podaj port:", 12345, 0, 65535, 1, &ok);
+    if (ok) {
+        manager->connectToServer(host, port);
+    }
+}
+

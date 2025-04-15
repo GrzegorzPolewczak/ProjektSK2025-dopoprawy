@@ -787,6 +787,32 @@
      <string>Ukryj legendy</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btn_start_server">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>670</y>
+      <width>83</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Server</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_polacz_klient">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>670</y>
+      <width>111</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Klient (polacz)</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -794,7 +820,7 @@
      <x>0</x>
      <y>0</y>
      <width>1400</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
